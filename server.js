@@ -1,3 +1,5 @@
+const main = require("./db/connect");
+
 const express = require("express");
 const app = express();
 const homeRoutes = require("./routes/home");
@@ -8,6 +10,11 @@ app.use("/api/v1", homeRoutes);
 //   res.send("Hello World");
 // });
 const port = 5000;
-app.listen(port, () => {
-  console.log("Server is listening at port 5000...");
-});
+main()
+  .then((res) => {
+    console.log("Connection Successful", res);
+    app.listen(port, () => {
+      console.log("Server is listening at port 5000...");
+    });
+  })
+  .catch((err) => console.log(err));
