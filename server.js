@@ -12,7 +12,7 @@ app.use("/api/v1", homeRoutes);
 const port = 5000;
 main()
   .then((res) => {
-    console.log("Connection Successful", res);
+    console.log(res);
     app.listen(port, () => {
       console.log("Server is listening at port 5000...");
     });
