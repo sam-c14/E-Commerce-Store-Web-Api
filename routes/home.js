@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getProducts,
   setProducts,
   getSponsoredProducts,
   getTodaysDeals,
   getRecommendedProducts,
 } = require("../controllers/home");
 
-router.route("/").get(getProducts).post(setProducts);
+router.route("/").get(getTodaysDeals).post(setProducts);
 
 module.exports = router;
