@@ -9,11 +9,11 @@ app.use("/api/v1", homeRoutes);
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
 // });
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 main(process.env.MONGO_URI)
   .then((res) => {
     console.log(res);
-    app.listen(port, () => {
+    app.listen(PORT, () => {
       console.log("Server is listening at port 5000...");
     });
   })
