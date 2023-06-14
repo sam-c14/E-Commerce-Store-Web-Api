@@ -1,17 +1,17 @@
 const getTodaysDeals = (req, res) => {
-  res.send("Todays Deals");
+  res.json("Todays Deals");
 };
 const getSponsoredProducts = (req, res) => {
-  res.send(" Sponsored Products");
+  res.json(" Sponsored Products");
 };
 const getRecommendedProducts = (req, res) => {
-  res.send("Hello World");
+  res.json("Hello World");
 };
 // const getTodaysDeals = (req, res) => {
-//   res.send("Hello World");
+//   res.json("Hello World");
 // };
 const setProducts = (req, res) => {
-  res.send("Products Set");
+  res.json("Products Set");
 };
 
 module.exports = {

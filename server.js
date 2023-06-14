@@ -2,8 +2,10 @@ const main = require("./db/connect");
 const express = require("express");
 const app = express();
 const homeRoutes = require("./routes/home");
+const cors = require('cors')
 require("dotenv").config();
 
+app.use(cors())
 app.use(express.json());
 app.use("/api/v1", homeRoutes);
 // app.get("/", (req, res) => {
