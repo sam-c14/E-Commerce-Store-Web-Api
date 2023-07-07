@@ -1,3 +1,5 @@
+// const User = require("../models/user");
+
 const getTodaysDeals = (req, res) => {
   res.json("Todays Deals");
 };
