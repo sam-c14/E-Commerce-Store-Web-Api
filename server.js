@@ -4,8 +4,16 @@ const app = express();
 const homeRoutes = require("./routes/home");
 const cors = require("cors");
 const db = require("./models/index");
+const { redisConnect, redisClient } = require("./db/redisConnect.");
 require("dotenv").config();
 const cookieSession = require("cookie-session");
+const session = require("express-session"); //Importing express session
+const RedisStore = require("connect-redis").default; //Importing connect-redis and passing the session
+
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "E-Mart:",
+});
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +29,15 @@ app.use(
   })
 );
 
+app.use(
+  session({
+    secret: process.env.REDIS_STORE_SECRET_KEY, //session secret key
+    resave: false,
+    saveUninitialized: false,
+    store: redisStore, //Setting the store
+  })
+);
+
 require("./routes/auth")(app);
 require("./routes/user")(app);
 
@@ -28,6 +45,7 @@ const PORT = process.env.PORT || 5000;
 main(process.env.MONGO_URI)
   .then(async () => {
     await initial();
+    await redisConnect();
     app.listen(PORT, () => {
       console.log(`Server is listening at port ${process.env.PORT}...`);
     });
