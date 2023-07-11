@@ -29,7 +29,7 @@ main(process.env.MONGO_URI)
   .then(async () => {
     await initial();
     app.listen(PORT, () => {
-      console.log("Server is listening at port 5000...");
+      console.log(`Server is listening at port ${process.env.PORT}...`);
     });
   })
   .catch((err) => {

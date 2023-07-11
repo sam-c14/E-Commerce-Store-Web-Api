@@ -8,7 +8,7 @@ module.exports = function (app) {
   });
 
   app.post(
-    "/signup",
+    "/api/v1/signup",
     [
       verifySignUp.checkDuplicateUsernameOrEmail,
       verifySignUp.checkRolesExisted,
@@ -16,7 +16,7 @@ module.exports = function (app) {
     signUp
   );
 
-  app.post("/login", signIn);
+  app.post("/api/v1/login", signIn);
 
-  app.post("/logout", signOut);
+  app.post("/api/v1/logout", signOut);
 };

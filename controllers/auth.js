@@ -1,25 +1,4 @@
-const Auth = require("../models/user.model");
-
-const loginUser = async (req, res) => {
-  const user = await Auth.findOne(req.body).exec();
-  try {
-    if (user === null) {
-      res.statusMessage =
-        "The user could not be found, Please Register to be able to login";
-      return res.status(404).json({ user });
-    }
-  } catch (error) {
-    res.statusMessage =
-      "There was an error processing the request from the server, Please Try Again";
-    return res.status(500).json({ user });
-  }
-  res.status(200).json({ user });
-};
-const registerUser = async (req, res) => {
-  const user = await Auth.create(req.body);
-  res.status(201).json({ user });
-};
-
+// const Auth = require("../models/user.model");
 const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
@@ -28,107 +7,70 @@ const Role = db.role;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-const signUp = (req, res) => {
-  const user = new User({
-    // username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-  });
-
-  user.save((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
+const signUp = async (req, res) => {
+  try {
+    const user = await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: Number(req.body.phoneNumber),
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+    });
+    console.log(user);
     if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles },
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          user.roles = roles.map((role) => role._id);
-          user.save((err) => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            res.send({ message: "User was registered successfully!" });
-          });
-        }
-      );
+      const roles = await Role.find({ name: { $in: req.body.roles } }).exec();
+      user.roles = roles.map((role) => role._id);
+      const newUser = user.save();
+      res.send({ message: "User was registered successfully!" });
     } else {
-      Role.findOne({ name: "user" }, (err, role) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
+      const role = await Role.findOne({ name: "user" }).exec();
+      if (role) {
         user.roles = [role._id];
-        user.save((err) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          res.send({ message: "User was registered successfully!" });
-        });
-      });
+        const updatedUser = await user.save();
+        res.send({ message: "User was registered successfully!" });
+      }
     }
-  });
+  } catch (error) {
+    error.response.status(500).json({ error });
+  }
 };
 
-const signIn = (req, res) => {
-  User.findOne({
+const signIn = async (req, res) => {
+  const user = await User.findOne({
     username: req.body.username,
   })
     .populate("roles", "-__v")
-    .exec((err, user) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
+    .exec();
+  if (!user) {
+    return res.status(404).send({ message: "User Not found." });
+  }
 
-      if (!user) {
-        return res.status(404).send({ message: "User Not found." });
-      }
+  var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
+  if (!passwordIsValid) {
+    return res.status(401).send({ message: "Invalid Password!" });
+  }
 
-      if (!passwordIsValid) {
-        return res.status(401).send({ message: "Invalid Password!" });
-      }
+  const token = jwt.sign({ id: user.id }, config.secret, {
+    algorithm: "HS256",
+    allowInsecureKeySizes: true,
+    expiresIn: 86400, // 24 hours
+  });
 
-      const token = jwt.sign({ id: user.id }, config.secret, {
-        algorithm: "HS256",
-        allowInsecureKeySizes: true,
-        expiresIn: 86400, // 24 hours
-      });
+  var authorities = [];
 
-      var authorities = [];
+  for (let i = 0; i < user.roles.length; i++) {
+    authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+  }
 
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
+  req.session.token = token;
 
-      req.session.token = token;
-
-      res.status(200).send({
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        roles: authorities,
-      });
-    });
+  res.status(200).send({
+    id: user._id,
+    username: `${user.firstName} ${user.lastName}`,
+    email: user.email,
+    roles: authorities,
+  });
 };
 
 const signOut = async (req, res) => {
