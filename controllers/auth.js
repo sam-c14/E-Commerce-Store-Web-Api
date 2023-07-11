@@ -65,11 +65,14 @@ const signIn = async (req, res) => {
 
   req.session.token = token;
 
-  res.status(200).send({
+  res.status(200).json({
     id: user._id,
     username: `${user.firstName} ${user.lastName}`,
     email: user.email,
     roles: authorities,
+    session: {
+      token: token,
+    },
   });
 };
 
