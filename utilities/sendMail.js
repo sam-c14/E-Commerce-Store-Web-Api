@@ -58,7 +58,7 @@ let config = {
 const sendOtpMail = async (req, res) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
-    // console.log(accessToken, "access");
+    console.log(accessToken, "access");
     config.auth.accessToken = accessToken;
     const transporter = nodemailer.createTransport(config);
     message.to = req.params.userEmail;
@@ -67,7 +67,9 @@ const sendOtpMail = async (req, res) => {
     res.status(200).json({ msg: "You should receive an email" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ msg: "Something went wrong with the process" });
+    res
+      .status(500)
+      .json({ msg: "Something went wrong with the process from sendMail" });
   }
 };
 
