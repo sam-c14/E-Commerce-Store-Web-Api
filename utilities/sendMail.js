@@ -23,7 +23,7 @@ const response = {
     outro: otp,
   },
 };
-// console.log(typeof response);
+console.log(typeof process.env.REFRESH_TOKEN);
 const mail = mailGen.generate(response);
 // console.log(mail);
 
