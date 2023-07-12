@@ -1,18 +1,7 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 const MailGen = require("mailgen");
 const otpGenerator = require("./otpGenerator");
-const config = {
-  type: "OAuth2",
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASSWORD,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-  },
-};
-
-const transporter = nodemailer.createTransport(config);
 
 const mailGen = new MailGen({
   theme: "default",
@@ -43,8 +32,35 @@ const message = {
   subject: "Testing Mail Functionality",
   html: mail,
 };
+
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  process.env.REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
+
+let config = {
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+};
+
 const sendOtpMail = async (req, res) => {
   try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    // console.log(accessToken, "access");
+    config.auth.accessToken = accessToken;
+    const transporter = nodemailer.createTransport(config);
     message.to = req.params.userEmail;
     req.session.OTP = otp; //Storing the OTP in the session
     await transporter.sendMail(message);

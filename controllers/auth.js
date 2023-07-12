@@ -19,6 +19,7 @@ const signUp = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 8),
     });
     // console.log(req.body);
+    // console.log(req.body.email);
     // console.log(user);
     if (req.body.roles) {
       const roles = await Role.find({ name: { $in: req.body.roles } }).exec();
@@ -32,7 +33,7 @@ const signUp = async (req, res) => {
         await user.save();
         // res.send({ message: "User was registered successfully!" });
       }
-      console.log(user.email);
+      // console.log(user.email);
       res.redirect(`/api/v1/send-otp/${user.email}`); // Redirecting to send Otp to Users mail
       res.end();
     }
