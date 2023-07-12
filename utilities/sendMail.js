@@ -2,10 +2,13 @@ const nodemailer = require("nodemailer");
 const MailGen = require("mailgen");
 const otpGenerator = require("./otpGenerator");
 const config = {
+  type: "OAuth2",
   service: "gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASSWORD,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
   },
 };
 
@@ -46,7 +49,6 @@ const sendOtpMail = async (req, res) => {
     req.session.OTP = otp; //Storing the OTP in the session
     await transporter.sendMail(message);
     res.status(200).json({ msg: "You should receive an email" });
-    // res.redirect("/verify-otp");
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Something went wrong with the process" });
