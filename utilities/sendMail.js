@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const MailGen = require("mailgen");
 const otpGenerator = require("./otpGenerator");
+require("dotenv").config();
 
 const mailGen = new MailGen({
   theme: "default",
