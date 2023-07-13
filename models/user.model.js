@@ -14,6 +14,7 @@ var UserSchema = new Schema({
       ref: "Role",
     },
   ],
+  otp: String,
 });
 
 // UserSchema.plugin(passportLocalMongoose);

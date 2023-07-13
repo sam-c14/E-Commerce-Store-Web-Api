@@ -1,5 +1,5 @@
 const { verifySignUp } = require("../middlewares");
-const { signIn, signUp, signOut, verifyOtp } = require("../controllers/auth");
+const { signIn, signUp, signOut, verifyEmail } = require("../controllers/auth");
 const sendMailOtp = require("../utilities/sendMail");
 
 module.exports = function (app) {
@@ -22,10 +22,5 @@ module.exports = function (app) {
   app.post("/api/v1/logout", signOut);
 
   app.get("/api/v1/send-otp/:userEmail", sendMailOtp);
-  app.get("/api/v1/verify-otp", (req, res) => {
-    // console.log(res);
-    // res.send("Welcome to the verify route"); //Welcome Message
-    console.log(req.session.OTP); //Logging out the OTP stored in the session.
-  });
-  app.post("/api/v1/verify-otp", verifyOtp);
+  app.post("/api/v1/send-otp", verifyEmail);
 };

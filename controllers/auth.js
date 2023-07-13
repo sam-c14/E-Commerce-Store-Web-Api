@@ -3,6 +3,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const findUserByEmail = require("../utilities/findUser");
 
 // const sendMail = require("../utilities/sendMail");
 
@@ -90,25 +91,27 @@ const signOut = async (req, res) => {
   }
 };
 
-// app.post("/verify",);
-const verifyOtp = (req, res) => {
-  const { OTP } = req.body; //Getting the user provided OTP
-  const OTPSession = req.session.OTP; //Getting the stored OTP
-  if (OTPSession) {
-    //Checking if the OTP exist in the session
-    if (OTP === OTPSession) {
-      //Verifying the similarity of the OTP
-      req.session.isAuth = true; //Setting auth to true
-      return res.status(200).json({ message: "OTP is correct" });
-    }
-    return res.status(401).json({ message: "Incorrect OTP" });
+const verifyEmail = async (req, res) => {
+  const { email, otp } = req.body;
+  const user = await findUserByEmail(email, User);
+  if (user.otp === otp) {
+    const updatedUser = await User.updateOne(
+      { email: email },
+      {
+        $unset: { otp: 1 },
+      }
+    ).exec();
+    console.log(updatedUser);
+    res.status(201).json({ msg: "User SignUp successful" });
+  } else {
+    res.status(403).json({ msg: "Incorrect otp" });
   }
-  return res.status(404).json({ message: "OTP not found" });
+  // res.send(user);
 };
 
 module.exports = {
   signIn,
   signOut,
   signUp,
-  verifyOtp,
+  verifyEmail,
 };

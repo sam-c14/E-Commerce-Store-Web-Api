@@ -45,7 +45,7 @@ const PORT = process.env.PORT || 5000;
 main(process.env.MONGO_URI)
   .then(async () => {
     await initial();
-    await redisConnect();
+    // await redisConnect();
     app.listen(PORT, () => {
       console.log(`Server is listening at port ${process.env.PORT}...`);
     });

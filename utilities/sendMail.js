@@ -2,7 +2,9 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const MailGen = require("mailgen");
 const otpGenerator = require("./otpGenerator");
-require("dotenv").config();
+const findUserByEmail = require("../utilities/findUser");
+const db = require("../models/index");
+const User = db.user;
 
 const mailGen = new MailGen({
   theme: "default",
@@ -23,14 +25,14 @@ const response = {
     outro: otp,
   },
 };
-console.log(typeof process.env.REFRESH_TOKEN);
+// console.log(typeof process.env.REFRESH_TOKEN);
 const mail = mailGen.generate(response);
 // console.log(mail);
 
 const message = {
   from: process.env.EMAIL,
   to: "",
-  subject: "Testing Mail Functionality",
+  subject: "USER SIGNUP VERIFICATION",
   html: mail,
 };
 
@@ -63,9 +65,17 @@ const sendOtpMail = async (req, res) => {
     config.auth.accessToken = accessToken;
     const transporter = nodemailer.createTransport(config);
     message.to = req.params.userEmail;
-    req.session.OTP = otp; //Storing the OTP in the session
+    const user = await findUserByEmail(req.params.userEmail, User);
+    // save the otp in the users document
+    user.otp = otp;
+    await user.save();
     await transporter.sendMail(message);
-    res.status(200).json({ msg: "You should receive an email" });
+    res
+      .status(200)
+      .json({
+        msg: "You should receive an email",
+        userEmail: req.params.userEmail,
+      });
   } catch (error) {
     console.log(error);
     res
