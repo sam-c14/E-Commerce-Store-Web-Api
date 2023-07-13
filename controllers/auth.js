@@ -43,14 +43,14 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   const user = await User.findOne({
-    username: req.body.username,
+    email: req.body.email,
   })
     .populate("roles", "-__v")
     .exec();
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
   }
-
+  console.log(user);
   var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!passwordIsValid) {

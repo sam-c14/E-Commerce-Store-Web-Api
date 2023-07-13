@@ -61,7 +61,7 @@ let config = {
 const sendOtpMail = async (req, res) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
-    console.log(accessToken, "access");
+    // console.log(accessToken, "access");
     config.auth.accessToken = accessToken;
     const transporter = nodemailer.createTransport(config);
     message.to = req.params.userEmail;
@@ -70,12 +70,10 @@ const sendOtpMail = async (req, res) => {
     user.otp = otp;
     await user.save();
     await transporter.sendMail(message);
-    res
-      .status(200)
-      .json({
-        msg: "You should receive an email",
-        userEmail: req.params.userEmail,
-      });
+    res.status(200).json({
+      msg: "You should receive an email",
+      userEmail: req.params.userEmail,
+    });
   } catch (error) {
     console.log(error);
     res
