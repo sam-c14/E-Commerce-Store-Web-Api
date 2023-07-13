@@ -9,8 +9,8 @@ const User = db.user;
 const mailGen = new MailGen({
   theme: "default",
   product: {
-    name: "Mailgen",
-    link: "https://mailgen.js/",
+    name: "E-Mart",
+    link: "https://e-commerce-store-rose.vercel.app/",
   },
 });
 
