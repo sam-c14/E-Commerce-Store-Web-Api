@@ -20,7 +20,7 @@ const response = {
   body: {
     name: "Confirm The Email You Registered with us",
     intro:
-      "Welcome to Mailgen! Verify it's you by entering the otp in the input.",
+      "Welcome to E-Mart! Verify it's you by entering the otp in the input.",
     text: "We at E-Mart want to be sure it's you so please enter the Otp below in the field provided on the site",
     outro: otp,
   },

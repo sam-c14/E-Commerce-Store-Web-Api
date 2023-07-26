@@ -5,6 +5,7 @@ const homeRoutes = require("./routes/home");
 const cors = require("cors");
 const db = require("./models/index");
 const { redisConnect, redisClient } = require("./db/redisConnect.");
+const ISODate = require("isodate");
 require("dotenv").config();
 const cookieSession = require("cookie-session");
 const session = require("express-session"); //Importing express session
@@ -40,6 +41,7 @@ app.use(
 
 require("./routes/auth")(app);
 require("./routes/user")(app);
+require("./routes/cart")(app);
 
 const PORT = process.env.PORT || 5000;
 main(process.env.MONGO_URI)
@@ -73,6 +75,38 @@ const initial = async () => {
         name: "admin",
       });
       if (admin) console.log("admin role successfully created");
+    }
+    const productCount = await db.products.estimatedDocumentCount();
+    if (productCount === 0) {
+      const Product = db.products;
+      await Product.create({
+        sku: "111445GB3",
+        title: "Simsong One mobile phone",
+        description: "The greatest Onedroid phone on the market .....",
+
+        manufacture_details: {
+          model_number: "A123X",
+          release_date: new ISODate("2012-05-17T08:14:15.656Z"),
+        },
+
+        shipping_details: {
+          weight: 350,
+          width: 10,
+          height: 10,
+          depth: 1,
+        },
+
+        quantity: 99,
+
+        pricing: {
+          price: 1000,
+        },
+      });
+      const query = { sku: "111445GB3" };
+      const updatedPro = await Product.findOne(query);
+      // console.log(updatedPro);
+      updatedPro.categories = ["mobile/15G", "mobile/fm"];
+      await updatedPro.save();
     }
   } catch (error) {
     console.log(error);

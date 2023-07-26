@@ -1,5 +1,6 @@
-const { verifySignUp } = require("../middlewares");
+const { verifySignUp } = require("../middlewares/auth");
 const { signIn, signUp, signOut, verifyEmail } = require("../controllers/auth");
+const { products } = require("../models/index");
 const sendMailOtp = require("../utilities/sendMail");
 
 module.exports = function (app) {
