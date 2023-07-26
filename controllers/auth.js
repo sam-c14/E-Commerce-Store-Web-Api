@@ -36,7 +36,7 @@ const signUp = async (req, res) => {
       res.end();
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error });
   }
 };
@@ -50,11 +50,11 @@ const signIn = async (req, res) => {
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
   }
-  console.log(user);
+  // console.log(user);
   var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!passwordIsValid) {
-    return res.status(401).send({ message: "Invalid Password!" });
+    return res.status(401).json({ message: "Invalid Password!" });
   }
 
   const token = jwt.sign({ id: user.id }, config.secret, {
@@ -71,7 +71,7 @@ const signIn = async (req, res) => {
 
   req.session.token = token;
 
-  return res.status(201).send({
+  return res.status(201).json({
     data: {
       id: user._id,
       username: `${user.firstName} ${user.lastName}`,
