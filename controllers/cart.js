@@ -7,9 +7,9 @@ const createCart = async (req, res) => {
     const reqBody = req.body;
     console.log(req.session);
     const newCart = await Cart.create(reqBody);
-    res.json({ message: "Cart created successfully" });
+    res.send({ message: "Cart created successfully" });
   } catch (error) {
-    res.json(error);
+    res.send(error);
   }
 };
 
@@ -61,10 +61,10 @@ const addToCart = async (req, res) => {
           $set: { quantity: oldQuantity },
         }
       );
-      res.status(400).json({ msg: "There was an issue adding to cart" });
+      res.status(400).send({ msg: "There was an issue adding to cart" });
       return;
     }
-    res.status(201).json({ msg: "Successfully added to cart" });
+    res.status(201).send({ msg: "Successfully added to cart" });
   } catch (error) {
     console.log(error);
   }
@@ -81,7 +81,7 @@ const updateProducts = async (filter, updates) => {
 
 const checkCartStatus = async (req, res) => {
   const { status } = await product.findOne({ _id: req.body._id });
-  res.status(200).json({ status });
+  res.status(200).send({ status });
 };
 
 const removeFromCart = async (req, res) => {
@@ -127,7 +127,7 @@ const removeFromCart = async (req, res) => {
   );
   console.log(updatedProductCatalog);
 
-  res.json({ msg: "Item Successfully removed" });
+  res.send({ msg: "Item Successfully removed" });
 };
 
 const changeProductQuantity = async (req, res) => {
@@ -222,10 +222,10 @@ const changeProductQuantity = async (req, res) => {
       );
     }
 
-    res.status(201).json({ msg: "Cart Quantity Successfully Updated" });
+    res.status(201).send({ msg: "Cart Quantity Successfully Updated" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ msg: "An error occurred in the process" });
+    res.status(500).send({ msg: "An error occurred in the process" });
   }
 };
 

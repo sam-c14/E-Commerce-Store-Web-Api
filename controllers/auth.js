@@ -71,13 +71,13 @@ const signIn = async (req, res) => {
 
   req.session.token = token;
 
-  res.status(200).json({
+  res.status(201).send({
     id: user._id,
     username: `${user.firstName} ${user.lastName}`,
     email: user.email,
     roles: authorities,
     session: {
-      token: token,
+      token,
     },
   });
 };
@@ -102,9 +102,9 @@ const verifyEmail = async (req, res) => {
       }
     ).exec();
     console.log(updatedUser);
-    res.status(201).json({ msg: "User SignUp successful" });
+    res.status(201).send({ msg: "User SignUp successful" });
   } else {
-    res.status(403).json({ msg: "Incorrect otp" });
+    res.status(403).send({ msg: "Incorrect otp" });
   }
   // res.send(user);
 };
