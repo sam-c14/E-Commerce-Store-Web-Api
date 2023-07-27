@@ -2,7 +2,7 @@ const db = require("../../models/index");
 const ISODate = require("isodate");
 
 checkProductInventory = async (req, res, next) => {
-  // Usernames
+  // Carts
   const { products, _id } = req.body;
   const newQuantity = 1;
   try {

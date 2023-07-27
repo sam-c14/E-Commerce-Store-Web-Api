@@ -9,6 +9,8 @@ const ProductSchema = new mongoose.Schema({
   manufacture_details: {
     model_number: String,
     release_date: String,
+    brand: String,
+    phoneNumber: String,
   },
 
   shipping_details: {
@@ -16,6 +18,18 @@ const ProductSchema = new mongoose.Schema({
     width: Number,
     height: Number,
     depth: Number,
+  },
+
+  product_details: {
+    overview: Array,
+    description: Object,
+    shipping: String,
+    warranty: {
+      term: String,
+      details: String,
+    },
+    return_policy: String,
+    review: String,
   },
 
   quantity: Number,

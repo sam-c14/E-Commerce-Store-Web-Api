@@ -42,6 +42,7 @@ app.use(
 require("./routes/auth")(app);
 require("./routes/user")(app);
 require("./routes/cart")(app);
+require("./routes/products")(app);
 
 const PORT = process.env.PORT || 5000;
 main(process.env.MONGO_URI)
@@ -87,6 +88,8 @@ const initial = async () => {
         manufacture_details: {
           model_number: "A123X",
           release_date: new ISODate("2012-05-17T08:14:15.656Z"),
+          brand: "Simsong",
+          phoneNumber: "07041604936",
         },
 
         shipping_details: {
@@ -96,17 +99,30 @@ const initial = async () => {
           depth: 1,
         },
 
-        quantity: 99,
+        product_details: {
+          overview: ["Light-weight", "Good Battery Life", "Nice Shape"],
+          description: {
+            color: "Black",
+            brand: "Simsong",
+            screen_size: "Others",
+            connectivity: "WiFi + 4G",
+            sim_type: "Nano Sim",
+          },
+          shipping: "1-7 days",
+          warranty: {
+            term: "1 Year",
+            details: "AUTHORIZED SIMSONG PHONES",
+          },
+          return_policy: "No return policy",
+          review: "This product does not have any reviews yet",
+        },
 
+        quantity: 99,
+        categories: ["mobile/15G", "mobile/fm"],
         pricing: {
           price: 1000,
         },
       });
-      const query = { sku: "111445GB3" };
-      const updatedPro = await Product.findOne(query);
-      // console.log(updatedPro);
-      updatedPro.categories = ["mobile/15G", "mobile/fm"];
-      await updatedPro.save();
     }
   } catch (error) {
     console.log(error);
