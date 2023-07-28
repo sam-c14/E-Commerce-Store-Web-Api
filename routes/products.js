@@ -4,6 +4,9 @@ const {
   removeProduct,
   updateProduct,
 } = require("../controllers/products");
+const {
+  checkProductExisted,
+} = require("../middlewares/products/checkProductCat");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -11,7 +14,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/admin/v1/add-product", addProduct);
+  app.post("/admin/v1/add-product", [checkProductExisted], addProduct);
 
   app.post("/admin/v1/remove-product/:productId", removeProduct);
 

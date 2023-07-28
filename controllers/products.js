@@ -3,7 +3,7 @@ const Product = products;
 
 const addProduct = async (req, res) => {
   try {
-    const addedProduct = await Product.create(req.body);
+    await Product.create(req.body);
     res.status(201).send({ message: "Product added successfully!" });
   } catch (err) {
     res.status(500).json(err);
