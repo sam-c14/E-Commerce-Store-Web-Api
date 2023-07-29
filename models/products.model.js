@@ -30,6 +30,7 @@ const ProductSchema = new mongoose.Schema({
     },
     return_policy: String,
     review: String,
+    product_url: String,
   },
 
   quantity: Number,

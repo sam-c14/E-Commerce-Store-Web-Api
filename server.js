@@ -115,6 +115,8 @@ const initial = async () => {
           },
           return_policy: "No return policy",
           review: "This product does not have any reviews yet",
+          photo_url:
+            "https://res.cloudinary.com/duea0cvru/image/upload/v1690577049/cld-sample-5.jpg",
         },
 
         quantity: 99,
