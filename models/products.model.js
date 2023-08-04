@@ -28,9 +28,8 @@ const ProductSchema = new mongoose.Schema({
       term: String,
       details: String,
     },
+    product_img: String,
     return_policy: String,
-    review: String,
-    product_url: String,
   },
 
   quantity: Number,
