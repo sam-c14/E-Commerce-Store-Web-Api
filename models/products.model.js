@@ -36,6 +36,7 @@ const ProductSchema = new mongoose.Schema({
   categories: Array,
   pricing: {
     price: Number,
+    discount: Number,
   },
   in_carts: Array,
 });
