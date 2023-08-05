@@ -22,6 +22,7 @@ module.exports = function (app) {
   app.put("/admin/v1/update-product/:productId", updateProduct);
 
   app.get("/admin/v1/get-products", getAllProducts);
+  app.get("/api/v1/get-products", getAllProducts);
 
   //   app.get("/admin/v1/send-otp/:userEmail", sendMailOtp);
   //   app.post("/admin/v1/send-otp", verifyEmail);
