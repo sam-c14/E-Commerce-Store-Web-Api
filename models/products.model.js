@@ -10,7 +10,7 @@ const ProductSchema = new mongoose.Schema({
     model_number: String,
     release_date: String,
     brand: String,
-    phoneNumber: String,
+    phone_number: String,
   },
 
   shipping_details: {
