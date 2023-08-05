@@ -77,53 +77,53 @@ const initial = async () => {
       });
       if (admin) console.log("admin role successfully created");
     }
-    const productCount = await db.products.estimatedDocumentCount();
-    if (productCount === 0) {
-      const Product = db.products;
-      await Product.create({
-        sku: "111445GB3",
-        title: "Simsong One mobile phone",
-        description: "The greatest Onedroid phone on the market .....",
+    // const productCount = await db.products.estimatedDocumentCount();
+    // if (productCount === 0) {
+    //   const Product = db.products;
+    //   await Product.create({
+    //     sku: "111445GB3",
+    //     title: "Simsong One mobile phone",
+    //     description: "The greatest Onedroid phone on the market .....",
 
-        manufacture_details: {
-          model_number: "A123X",
-          release_date: new ISODate("2012-05-17T08:14:15.656Z"),
-          brand: "Simsong",
-          phoneNumber: "07041604936",
-        },
+    //     manufacture_details: {
+    //       model_number: "A123X",
+    //       release_date: new ISODate("2012-05-17T08:14:15.656Z"),
+    //       brand: "Simsong",
+    //       phoneNumber: "07041604936",
+    //     },
 
-        shipping_details: {
-          weight: 350,
-          width: 10,
-          height: 10,
-          depth: 1,
-        },
+    //     shipping_details: {
+    //       weight: 350,
+    //       width: 10,
+    //       height: 10,
+    //       depth: 1,
+    //     },
 
-        product_details: {
-          overview: ["Light-weight", "Good Battery Life", "Nice Shape"],
-          description: {
-            color: "Black",
-            brand: "Simsong",
-            screen_size: "Others",
-            connectivity: "WiFi + 4G",
-            sim_type: "Nano Sim",
-          },
-          shipping: "1-7 days",
-          warranty: {
-            term: "1 Year",
-            details: "AUTHORIZED SIMSONG PHONES",
-          },
-          product_img: "https://res.cloudinary.com/",
-          return_policy: "No return policy",
-        },
+    //     product_details: {
+    //       overview: ["Light-weight", "Good Battery Life", "Nice Shape"],
+    //       description: {
+    //         color: "Black",
+    //         brand: "Simsong",
+    //         screen_size: "Others",
+    //         connectivity: "WiFi + 4G",
+    //         sim_type: "Nano Sim",
+    //       },
+    //       shipping: "1-7 days",
+    //       warranty: {
+    //         term: "1 Year",
+    //         details: "AUTHORIZED SIMSONG PHONES",
+    //       },
+    //       product_img: "https://res.cloudinary.com/",
+    //       return_policy: "No return policy",
+    //     },
 
-        quantity: 99,
-        categories: ["mobile/15G", "mobile/fm"],
-        pricing: {
-          price: 1000,
-        },
-      });
-    }
+    //     quantity: 99,
+    //     categories: ["mobile/15G", "mobile/fm"],
+    //     pricing: {
+    //       price: 1000,
+    //     },
+    //   });
+    // }
   } catch (error) {
     console.log(error);
   }

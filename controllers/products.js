@@ -28,8 +28,20 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const getAllProducts = async (req, res) => {
+  try {
+    const allProducts = await Product.find({});
+    res.status(200).json({ product: allProducts });
+  } catch (error) {
+    res.status(500).json({
+      msg: "An error occurred while getting the products, Please refresh te browser and try again",
+    });
+  }
+};
+
 module.exports = {
   addProduct,
   removeProduct,
   updateProduct,
+  getAllProducts,
 };
