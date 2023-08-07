@@ -4,6 +4,7 @@ const {
   removeProduct,
   updateProduct,
   getAllProducts,
+  getProductsByPage,
 } = require("../controllers/products");
 const {
   checkProductExisted,
@@ -23,6 +24,7 @@ module.exports = function (app) {
 
   app.get("/admin/v1/get-products", getAllProducts);
   app.get("/api/v1/get-products", getAllProducts);
+  app.get("/api/v1/get-products/:page", getProductsByPage);
 
   //   app.get("/admin/v1/send-otp/:userEmail", sendMailOtp);
   //   app.post("/admin/v1/send-otp", verifyEmail);

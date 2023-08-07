@@ -39,9 +39,35 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const getProductsByPage = async (req, res) => {
+  try {
+    const allProducts = await Product.find({});
+    const page = Number(req.params.page);
+    const limit = page * 7;
+    let start = limit - 7;
+    let pageProducts = [];
+    for (start; start < limit; start++) {
+      const currentProduct = allProducts[start];
+      if (!currentProduct) break;
+      pageProducts.push(currentProduct);
+    }
+
+    res.status(200).json({
+      product: pageProducts,
+      max_pages: Math.ceil(allProducts.length / 7),
+      current_page: page,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: `An error occurred while getting the products, Please check params being passed check ${error}`,
+    });
+  }
+};
+
 module.exports = {
   addProduct,
   removeProduct,
   updateProduct,
   getAllProducts,
+  getProductsByPage,
 };
