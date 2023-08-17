@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../middlewares/auth");
+const { verifySignUp, authJwt } = require("../middlewares/auth");
 const { signIn, signUp, signOut, verifyEmail } = require("../controllers/auth");
 const { products } = require("../models/index");
 const sendMailOtp = require("../utilities/sendMail");
@@ -150,7 +150,7 @@ module.exports = function (app) {
    *
    */
 
-  app.post("/api/v1/logout", signOut);
+  app.post("/api/v1/logout", [authJwt.verifyToken], signOut);
 
   app.get("/api/v1/send-otp/:userEmail", sendMailOtp);
   app.post("/api/v1/send-otp", verifyEmail);

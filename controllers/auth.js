@@ -31,12 +31,10 @@ const signUp = async (req, res) => {
         await user.save();
         // res.send({ message: "User was registered successfully!" });
       }
-      console.log(user.email);
       res.redirect(`/api/v1/send-otp/${user.email}`); // Redirecting to send Otp to Users mail
       res.end();
     }
   } catch (error) {
-    // console.log(error);
     res.status(500).json({ error });
   }
 };
@@ -50,7 +48,7 @@ const signIn = async (req, res) => {
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
   }
-  // console.log(user);
+
   var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!passwordIsValid) {

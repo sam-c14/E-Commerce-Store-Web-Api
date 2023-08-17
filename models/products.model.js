@@ -38,6 +38,7 @@ const ProductSchema = new mongoose.Schema({
     price: Number,
     discount: Number,
   },
+  product_tag: String,
   in_carts: Array,
 });
 module.exports = mongoose.model("Products", ProductSchema);
