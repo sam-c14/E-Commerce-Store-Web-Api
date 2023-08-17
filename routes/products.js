@@ -175,12 +175,8 @@ module.exports = function (app) {
    *          description : An error occurred while getting the products, Please refresh te browser and try again
    */
   app.get("/admin/v1/get-products/:page", getProductsByPage);
-  app.get("/api/v1/get-products", [authJwt.verifyToken], getAllProducts);
-  app.get(
-    "/api/v1/get-products/:page",
-    [authJwt.verifyToken],
-    getProductsByPage
-  );
+  app.get("/api/v1/get-products", getAllProducts);
+  app.get("/api/v1/get-products/:page", getProductsByPage);
 
   //   app.get("/admin/v1/send-otp/:userEmail", sendMailOtp);
   //   app.post("/admin/v1/send-otp", verifyEmail);
