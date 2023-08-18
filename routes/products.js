@@ -28,7 +28,11 @@ module.exports = function (app) {
    *          description : An error occurred while adding the product
    */
 
-  app.post("/admin/v1/add-product", [checkProductExisted], addProduct);
+  app.post(
+    "/admin/v1/add-product",
+    [checkProductExisted, authJwt.verifyToken],
+    addProduct
+  );
 
   /**
    * @swagger
@@ -42,7 +46,11 @@ module.exports = function (app) {
    *          description : An error occurred while adding the product
    */
 
-  app.post("/admin/v1/remove-product/:productId", removeProduct);
+  app.post(
+    "/admin/v1/remove-product/:productId",
+    [authJwt.verifyToken],
+    removeProduct
+  );
 
   /**
    * @swagger
@@ -55,7 +63,11 @@ module.exports = function (app) {
    *       500:
    *          description : An error occurred while adding the product
    */
-  app.put("/admin/v1/update-product/:productId", updateProduct);
+  app.put(
+    "/admin/v1/update-product/:productId",
+    [authJwt.verifyToken],
+    updateProduct
+  );
 
   /**
    * @swagger
@@ -115,7 +127,7 @@ module.exports = function (app) {
    *          description : An error occurred while getting the products, Please refresh te browser and try again
    */
 
-  app.get("/admin/v1/get-products", getAllProducts);
+  app.get("/admin/v1/get-products", [authJwt.verifyToken], getAllProducts);
 
   /**
    * @swagger
@@ -174,7 +186,11 @@ module.exports = function (app) {
    *       500:
    *          description : An error occurred while getting the products, Please refresh te browser and try again
    */
-  app.get("/admin/v1/get-products/:page", getProductsByPage);
+  app.get(
+    "/admin/v1/get-products/:page",
+    [authJwt.verifyToken],
+    getProductsByPage
+  );
   app.get("/api/v1/get-products", getAllProducts);
   app.get("/api/v1/get-products/:page", getProductsByPage);
 
