@@ -38,6 +38,7 @@ const signUp = async (req, res) => {
     res.status(500).json({ error });
   }
 };
+
 const adminSignUp = async (req, res) => {
   try {
     const user = await User.create({
@@ -72,10 +73,24 @@ const signIn = async (req, res) => {
   })
     .populate("roles", "-__v")
     .exec();
+
   if (!user) {
     return res.status(404).send({ message: "User Not found." });
   }
 
+  let userForbidden = true;
+  for (let role of user?.roles) {
+    if (role.name === req.body.role) {
+      userForbidden = false;
+      break;
+    }
+  }
+  // Checks to see if the the user is permitted with respect to the role
+  if (userForbidden) {
+    return res
+      .status(403)
+      .send({ message: `User is not a/an ${req.body.role}` });
+  }
   var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!passwordIsValid) {
@@ -127,7 +142,11 @@ const verifyEmail = async (req, res) => {
       {
         $unset: { otp: 1 },
       }
-    ).exec();
+    )
+      .exec()
+      .then((result) => {
+        console.log("Field removed successfully:", result);
+      });
     console.log(updatedUser);
     res.status(201).send({ msg: "User SignUp successful" });
   } else {

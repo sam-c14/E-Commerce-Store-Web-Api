@@ -158,6 +158,7 @@ module.exports = function (app) {
 
   app.post("/api/v1/logout", [authJwt.verifyToken], signOut);
 
+  /**
   app.post(
     "/admin/v1/signup",
     [
@@ -166,6 +167,62 @@ module.exports = function (app) {
     ],
     adminSignUp
   );
+
+  /**
+   * @swagger
+   * /api/v1/login:
+   *   post:
+   *     summary: Login as a user
+   *     parameters :
+   *       - in: path
+   *         name: email
+   *         required : true
+   *       - in: path
+   *         name: password
+   *         required : true
+   *     responses:
+   *       201:
+   *         description: Login successful
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                   description: ID of the user
+   *                 username:
+   *                   type: string
+   *                   description: Name of the user
+   *                 email:
+   *                   type: string
+   *                   description: Email of the user
+   *                 roles :
+   *                    type : array
+   *                    description : Array of the user's roles
+   *                 session :
+   *                    type : object
+   *                    description : Contains jwt token
+   *             example:
+   *               id: 64cd12bd00b2dc759fc33972
+   *               username: John Doe
+   *               email: johndoe@example.com
+   *               roles : ['USER']
+   *               session :
+   *                  token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+   *       500:
+   *         description: Internal Server error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 errorMsg:
+   *                   type: string
+   *                   description: response message
+   *             example:
+   *               errorMsg: An error occurred while processing your request
+   */
 
   app.post("/admin/v1/login", signIn);
 
