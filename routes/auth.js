@@ -152,6 +152,17 @@ module.exports = function (app) {
 
   app.post("/api/v1/logout", [authJwt.verifyToken], signOut);
 
+  app.post(
+    "/admin/v1/signup",
+    [
+      verifySignUp.checkDuplicateUsernameOrEmail,
+      verifySignUp.checkRolesExisted,
+    ],
+    signUp
+  );
+
+  app.post("/admin/v1/login", signIn);
+
   app.get("/api/v1/send-otp/:userEmail", sendMailOtp);
   app.post("/api/v1/send-otp", verifyEmail);
 };
