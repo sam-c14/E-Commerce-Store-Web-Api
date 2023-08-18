@@ -12,6 +12,22 @@ var bcrypt = require("bcryptjs");
 
 const signUp = async (req, res) => {
   try {
+    const existingUser = await User.findOne({
+      email: req.body.email,
+    });
+    if (existingUser) {
+      const roles = await Role.find({ name: { $in: req.body.role } }).exec();
+      const currentRoles = existingUser.roles;
+      roles.map((role) => {
+        !currentRoles.includes(role._id) ? currentRoles.push(role._id) : "";
+      });
+      existingUser.roles = currentRoles;
+      await existingUser.save();
+      res.send({
+        message: `User was registered successfully as a/an ${req.body.role}`,
+      });
+      return;
+    }
     const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -41,6 +57,22 @@ const signUp = async (req, res) => {
 
 const adminSignUp = async (req, res) => {
   try {
+    const existingUser = await User.findOne({
+      email: req.body.email,
+    });
+    if (existingUser) {
+      const roles = await Role.find({ name: { $in: req.body.role } }).exec();
+      const currentRoles = existingUser.roles;
+      roles.map((role) => {
+        !currentRoles.includes(role._id) ? currentRoles.push(role._id) : "";
+      });
+      existingUser.roles = currentRoles;
+      await existingUser.save();
+      res.send({
+        message: `User was registered successfully as a/an ${req.body.role}`,
+      });
+      return;
+    }
     const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -58,7 +90,6 @@ const adminSignUp = async (req, res) => {
       if (role) {
         user.roles = [role._id];
         await user.save();
-        // res.send({ message: "User was registered successfully!" });
       }
       res.end();
     }

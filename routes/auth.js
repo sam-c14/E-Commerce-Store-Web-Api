@@ -225,6 +225,7 @@ module.exports = function (app) {
    */
 
   app.post("/admin/v1/login", signIn);
+  app.post("/admin/v1/signup", adminSignUp);
 
   app.get("/api/v1/send-otp/:userEmail", sendMailOtp);
   app.post("/api/v1/send-otp", verifyEmail);
