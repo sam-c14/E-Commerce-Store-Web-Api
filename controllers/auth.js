@@ -38,6 +38,33 @@ const signUp = async (req, res) => {
     res.status(500).json({ error });
   }
 };
+const adminSignUp = async (req, res) => {
+  try {
+    const user = await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: Number(req.body.phoneNumber),
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+    });
+    if (req.body.roles) {
+      const roles = await Role.find({ name: { $in: req.body.roles } }).exec();
+      user.roles = roles.map((role) => role._id);
+      await user.save();
+      // res.send({ message: "User was registered successfully!" });
+    } else {
+      const role = await Role.findOne({ name: "user" }).exec();
+      if (role) {
+        user.roles = [role._id];
+        await user.save();
+        // res.send({ message: "User was registered successfully!" });
+      }
+      res.end();
+    }
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
 
 const signIn = async (req, res) => {
   const user = await User.findOne({
@@ -114,4 +141,5 @@ module.exports = {
   signOut,
   signUp,
   verifyEmail,
+  adminSignUp,
 };

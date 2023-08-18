@@ -1,5 +1,11 @@
 const { verifySignUp, authJwt } = require("../middlewares/auth");
-const { signIn, signUp, signOut, verifyEmail } = require("../controllers/auth");
+const {
+  signIn,
+  signUp,
+  signOut,
+  verifyEmail,
+  adminSignUp,
+} = require("../controllers/auth");
 const { products } = require("../models/index");
 const sendMailOtp = require("../utilities/sendMail");
 
@@ -158,7 +164,7 @@ module.exports = function (app) {
       verifySignUp.checkDuplicateUsernameOrEmail,
       verifySignUp.checkRolesExisted,
     ],
-    signUp
+    adminSignUp
   );
 
   app.post("/admin/v1/login", signIn);
