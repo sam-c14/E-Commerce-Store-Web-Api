@@ -4,17 +4,26 @@ const db = require("../../models");
 const User = db.user;
 const Role = db.role;
 
-verifyToken = (req, res, next) => {
+verifyToken = async (req, res, next) => {
   // let token = req.session.token;
-  const token = req.header("Authorization");
-  console.log(token);
+  const token = req.header("Authorization").split(" ");
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
+  // const user = await User.findOne({
+  //   email: "samuelaffah14@gmail.com",
+  // });
+  // const testToken = jwt.sign({ id: user.id }, config.secret, {
+  //   algorithm: "HS256",
+  //   allowInsecureKeySizes: true,
+  //   expiresIn: 86400, // 24 hours
+  // });
+  // console.log(testToken);
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
+      console.log(err);
       return res.status(401).send({
         message: "Unauthorized!",
       });
