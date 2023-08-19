@@ -66,14 +66,19 @@ const getProductsByPage = async (req, res) => {
 
 const getReservedProducts = async (req, res) => {
   try {
+    const tag = capitalize(req.params.tag);
     const sponsoredProducts = await products.find({
-      product_tag: req.body.tag,
+      product_tag: tag,
     });
     res.status(200).json({ sponsoredProducts });
   } catch (error) {
     res.status(200).json({ error });
   }
 };
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 module.exports = {
   addProduct,
@@ -82,4 +87,5 @@ module.exports = {
   getAllProducts,
   getProductsByPage,
   getReservedProducts,
+  capitalize,
 };

@@ -195,7 +195,7 @@ module.exports = function (app) {
   app.get("/api/v1/get-products", getAllProducts);
   app.get("/api/v1/get-products/:page", getProductsByPage);
 
-  app.get("/api/v1/get-reserved-products", getReservedProducts);
+  app.get("/api/v1/get-reserved-products/:tag", getReservedProducts);
 };
 /*
         sku: "111445GB3",
