@@ -5,11 +5,11 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-  let token = req.session.token;
-  const recheckToken = req.header("Authorization");
+  // let token = req.session.token;
+  const token = req.header("Authorization");
   console.log(recheckToken);
 
-  if (!token || !recheckToken) {
+  if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
 
