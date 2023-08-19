@@ -64,10 +64,22 @@ const getProductsByPage = async (req, res) => {
   }
 };
 
+const getReservedProducts = async (req, res) => {
+  try {
+    const sponsoredProducts = await products.find({
+      product_tag: req.body.tag,
+    });
+    res.status(200).json({ sponsoredProducts });
+  } catch (error) {
+    res.status(200).json({ error });
+  }
+};
+
 module.exports = {
   addProduct,
   removeProduct,
   updateProduct,
   getAllProducts,
   getProductsByPage,
+  getReservedProducts,
 };
