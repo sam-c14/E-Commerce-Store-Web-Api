@@ -15,54 +15,15 @@ const signUp = async (req, res) => {
     const existingUser = await User.findOne({
       email: req.body.email,
     });
-    if (existingUser) {
+    // Check if the user is already signed up on one of the other platforms
+    if (existingUser !== null) {
       const roles = await Role.find({ name: { $in: req.body.role } }).exec();
       const currentRoles = existingUser.roles;
-      roles.map((role) => {
-        !currentRoles.includes(role._id) ? currentRoles.push(role._id) : "";
-      });
-      existingUser.roles = currentRoles;
-      await existingUser.save();
-      res.send({
-        message: `User was registered successfully as a/an ${req.body.role}`,
-      });
-      return;
-    }
-    const user = await User.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      phoneNumber: Number(req.body.phoneNumber),
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8),
-    });
-    if (req.body.roles) {
-      const roles = await Role.find({ name: { $in: req.body.roles } }).exec();
-      user.roles = roles.map((role) => role._id);
-      await user.save();
-      // res.send({ message: "User was registered successfully!" });
-    } else {
-      const role = await Role.findOne({ name: "user" }).exec();
-      if (role) {
-        user.roles = [role._id];
-        await user.save();
-        // res.send({ message: "User was registered successfully!" });
+      if (currentRoles.includes(roles[0]._id)) {
+        return res.status(409).json({
+          message: `User already signed up, The email is already associated with an existing account`,
+        });
       }
-      res.redirect(`/api/v1/send-otp/${user.email}`); // Redirecting to send Otp to Users mail
-      res.end();
-    }
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
-
-const adminSignUp = async (req, res) => {
-  try {
-    const existingUser = await User.findOne({
-      email: req.body.email,
-    });
-    if (existingUser) {
-      const roles = await Role.find({ name: { $in: req.body.role } }).exec();
-      const currentRoles = existingUser.roles;
       roles.map((role) => {
         !currentRoles.includes(role._id) ? currentRoles.push(role._id) : "";
       });
@@ -191,5 +152,4 @@ module.exports = {
   signOut,
   signUp,
   verifyEmail,
-  adminSignUp,
 };

@@ -1,11 +1,5 @@
 const { verifySignUp, authJwt } = require("../middlewares/auth");
-const {
-  signIn,
-  signUp,
-  signOut,
-  verifyEmail,
-  adminSignUp,
-} = require("../controllers/auth");
+const { signIn, signUp, signOut, verifyEmail } = require("../controllers/auth");
 const { products } = require("../models/index");
 const sendMailOtp = require("../utilities/sendMail");
 
@@ -225,7 +219,7 @@ module.exports = function (app) {
    */
 
   app.post("/admin/v1/login", signIn);
-  app.post("/admin/v1/signup", adminSignUp);
+  app.post("/admin/v1/signup", signUp);
 
   app.get("/api/v1/send-otp/:userEmail", sendMailOtp);
   app.post("/api/v1/send-otp", verifyEmail);
