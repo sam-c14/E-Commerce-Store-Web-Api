@@ -52,6 +52,8 @@ const signUp = async (req, res) => {
         user.roles = [role._id];
         await user.save();
       }
+      res.redirect(`/api/v1/send-otp/${user.email}`);
+      res.send({ message: "User signup almost done, Otp sent" });
       res.end();
     }
   } catch (error) {
