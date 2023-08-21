@@ -6,6 +6,7 @@ const {
   getAllProducts,
   getProductsByPage,
   getReservedProducts,
+  getSingleProduct,
 } = require("../controllers/products");
 const {
   checkProductExisted,
@@ -192,8 +193,12 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     getProductsByPage
   );
+
+  app.get("/admin/v1/get-product/:sku", getSingleProduct);
+
   app.get("/api/v1/get-products", getAllProducts);
   app.get("/api/v1/get-products/:page", getProductsByPage);
+  app.get("/api/v1/get-product/:sku", getSingleProduct);
 
   app.get("/api/v1/get-reserved-products/:tag", getReservedProducts);
 };

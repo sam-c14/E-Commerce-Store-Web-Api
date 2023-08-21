@@ -76,6 +76,18 @@ const getReservedProducts = async (req, res) => {
   }
 };
 
+const getSingleProduct = async (req, res) => {
+  const sku = req.params.sku;
+  try {
+    const product = await products.findOne({ sku });
+    return product
+      ? res.status(200).json({ product })
+      : res.status(404).json({ msg: "The product does not exist" });
+  } catch (error) {
+    res.status(500).json({ msg: "There was an error with the server" });
+  }
+};
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -87,5 +99,6 @@ module.exports = {
   getAllProducts,
   getProductsByPage,
   getReservedProducts,
+  getSingleProduct,
   capitalize,
 };
