@@ -4,6 +4,7 @@ const {
   userBoard,
   adminBoard,
   moderatorBoard,
+  getUser,
 } = require("../controllers/user");
 
 module.exports = function (app) {
@@ -23,8 +24,10 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/api/test/admin",
+    "/api/v1/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     adminBoard
   );
+
+  app.get("/api/v1/user/", getUser);
 };

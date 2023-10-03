@@ -1,4 +1,3 @@
-// const Auth = require("../models/user.model");
 const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
@@ -52,8 +51,8 @@ const signUp = async (req, res) => {
         user.roles = [role._id];
         await user.save();
       }
-      res.redirect(`/api/v1/send-otp/${user.email}`);
-      res.send({ message: "User signup almost done, Otp sent" });
+      // res.redirect(`/api/v1/send-otp/${user.email}`);
+      res.send({ message: "SignUp Successful" });
       res.end();
     }
   } catch (error) {

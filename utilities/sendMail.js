@@ -59,6 +59,7 @@ let config = {
 };
 
 const sendOtpMail = async (req, res) => {
+  console.log("Got Here");
   try {
     const accessToken = await oAuth2Client.getAccessToken();
     // console.log(accessToken, "access");
@@ -66,6 +67,7 @@ const sendOtpMail = async (req, res) => {
     const transporter = nodemailer.createTransport(config);
     message.to = req.params.userEmail;
     const user = await findUserByEmail(req.params.userEmail, User);
+    // console.log(user);
     // save the otp in the users document
     user.otp = otp;
     await user.save();
