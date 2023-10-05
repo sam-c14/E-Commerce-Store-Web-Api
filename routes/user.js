@@ -5,6 +5,7 @@ const {
   adminBoard,
   moderatorBoard,
   getUser,
+  updateUserDetails,
 } = require("../controllers/user");
 
 module.exports = function (app) {
@@ -30,4 +31,5 @@ module.exports = function (app) {
   );
 
   app.get("/api/v1/user/", getUser);
+  app.put("/api/v1/update-user", updateUserDetails);
 };
