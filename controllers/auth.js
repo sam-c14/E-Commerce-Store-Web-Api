@@ -3,7 +3,7 @@ const db = require("../models");
 const User = db.user;
 const Role = db.role;
 const findUserByEmail = require("../utilities/findUser");
-
+const { createUserDefCart } = require("./cart");
 // const sendMail = require("../utilities/sendMail");
 
 var jwt = require("jsonwebtoken");
@@ -51,7 +51,7 @@ const signUp = async (req, res) => {
         user.roles = [role._id];
         await user.save();
       }
-      // res.redirect(`/api/v1/send-otp/${user.email}`);
+      await createUserDefCart(user);
       res.send({ message: "SignUp Successful" });
       res.end();
     }

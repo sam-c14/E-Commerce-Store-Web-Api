@@ -5,11 +5,28 @@ const Cart = cart;
 const createCart = async (req, res) => {
   try {
     const reqBody = req.body;
-    console.log(req.session);
+    // console.log(req.session);
     const newCart = await Cart.create(reqBody);
     res.send({ message: "Cart created successfully" });
   } catch (error) {
     res.send(error);
+  }
+};
+const createUserDefCart = async (user) => {
+  try {
+    const date = new Date();
+    const cart = {
+      _id: user._id,
+      status: "active",
+      quantity: 0,
+      total_price: 0,
+      modified_on: new ISODate(date),
+      products: [],
+    };
+    // console.log(req.session);
+    await Cart.create(cart);
+  } catch (error) {
+    return error;
   }
 };
 
@@ -67,6 +84,7 @@ const addToCart = async (req, res) => {
     res.status(201).send({ msg: "Successfully added to cart" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -229,10 +247,26 @@ const changeProductQuantity = async (req, res) => {
   }
 };
 
+const getCartData = async (req, res) => {
+  try {
+    const userCart = await Cart.findOne({ _id: req.query.id });
+
+    if (!userCart) {
+      res.status(404).json({ msg: "We couldn't find your cart" });
+    }
+
+    res.status(200).json({ cart: userCart });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createCart,
+  createUserDefCart,
   addToCart,
   checkCartStatus,
   removeFromCart,
   changeProductQuantity,
+  getCartData,
 };

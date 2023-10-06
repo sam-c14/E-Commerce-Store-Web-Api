@@ -5,6 +5,7 @@ const {
   changeProductQuantity,
   removeFromCart,
   checkCartStatus,
+  getCartData,
 } = require("../controllers/cart");
 
 module.exports = function (app) {
@@ -20,4 +21,5 @@ module.exports = function (app) {
   app.post("/api/v1/remove-from-cart", removeFromCart);
   app.post("/api/v1/check-status", checkCartStatus);
   app.post("/api/v1/add-to-cart", addToCart);
+  app.get("/api/v1/user-cart/", getCartData);
 };

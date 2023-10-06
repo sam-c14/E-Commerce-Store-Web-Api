@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 var UserSchema = new Schema({
   firstName: String,
   lastName: String,
-  phoneNumber: Number,
+  phoneNumber: String,
   email: String,
   password: String,
   roles: [
@@ -14,7 +14,6 @@ var UserSchema = new Schema({
       ref: "Role",
     },
   ],
-  otp: String,
 });
 
 // UserSchema.plugin(passportLocalMongoose);
