@@ -251,7 +251,7 @@ const getCartData = async (req, res) => {
   try {
     const userCart = await Cart.findOne({ _id: req.query.id });
 
-    if (!userCart) {
+    if (!userCart || !req.query.id) {
       res.status(404).json({ msg: "We couldn't find your cart" });
     }
 
