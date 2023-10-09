@@ -33,6 +33,10 @@ const createUserDefCart = async (user) => {
 const addToCart = async (req, res) => {
   try {
     const { _id: userSessionId, status, products } = req.body;
+    if (!userSessionId || !status)
+      return res
+        .status(400)
+        .json({ error: "Id and status fields cannot be empty" });
     const newQuantity = 1;
     const date = new Date();
     const cart = await Cart.findOneAndUpdate(
