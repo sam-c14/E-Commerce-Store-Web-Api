@@ -121,6 +121,7 @@ const removeFromCart = async (req, res) => {
   const newCartTotalPrice = userCart.total_price - itemQuantity * price;
   // console.log(userCart.total_price, newCartTotalPrice);
   const date = new Date();
+  userCart.products = userCart.products.filter((item) => item.sku !== sku);
 
   const updates = {
     $set: {
@@ -128,26 +129,43 @@ const removeFromCart = async (req, res) => {
       quantity: newCartQuantity,
       total_price: newCartTotalPrice,
     },
-    $pull: {
-      products: [sku],
-    },
   };
-  await cart.updateOne(filter, updates);
-
-  const updatedProductCatalog = await products.updateOne(
-    {
-      sku,
-    },
-    {
-      $inc: { quantity: itemQuantity },
-      $pull: {
-        in_carts: [{ id: cartId }],
-      },
+  try {
+    const productToBeUpdated = await products.findOne({ sku });
+    if (!productToBeUpdated) {
+      return res
+        .status(404)
+        .json({ msg: "The product you're trying to remove cannot be found" });
     }
-  );
-  console.log(updatedProductCatalog);
 
-  res.send({ msg: "Item Successfully removed" });
+    productToBeUpdated.in_carts = productToBeUpdated.in_carts.filter(
+      (item) => item.id !== cartId
+    );
+    // console.log("Got Here");
+    productToBeUpdated.quantity += itemQuantity;
+    // console.log("After");
+    await productToBeUpdated.save();
+
+    await cart.updateOne(filter, updates);
+    await userCart.save();
+
+    // const updatedProductCatalog = await products.updateOne(
+    //   {
+    //     sku,
+    //   },
+    //   {
+    //     $inc: { quantity: itemQuantity },
+    //     $pull: {
+    //       in_carts: [{ id: cartId }],
+    //     },
+    //   }
+    // );
+    // console.log(productToBeUpdated);
+
+    return res.status(201).json({ msg: "Item Successfully removed" });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
 };
 
 const changeProductQuantity = async (req, res) => {
