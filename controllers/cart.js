@@ -103,12 +103,13 @@ const checkCartStatus = async (req, res) => {
 };
 
 const removeFromCart = async (req, res) => {
-  const { sku, id: cartId, price } = req.body;
+  let { sku, id: cartId, price } = req.body;
   const filter = {
     _id: cartId,
   };
-
-  const userCart = await cart.findOne(filter);
+  price = parseInt(price);
+  const userCart = await Cart.findOne(filter);
+  // console.log(typeof price);
   let itemQuantity = null;
   userCart.products.map((product) => {
     if (product.sku === sku) {
@@ -117,7 +118,8 @@ const removeFromCart = async (req, res) => {
   });
 
   const newCartQuantity = userCart.quantity - itemQuantity;
-  const newCartTotalPrice = userCart.price - itemQuantity * price;
+  const newCartTotalPrice = userCart.total_price - itemQuantity * price;
+  // console.log(userCart.total_price, newCartTotalPrice);
   const date = new Date();
 
   const updates = {
