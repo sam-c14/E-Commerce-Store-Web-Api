@@ -225,13 +225,17 @@ const changeProductQuantity = async (req, res) => {
       const oldPrice = userCart.total_price;
       const newPrice = oldPrice - price;
       const newQuantity = userCart.quantity - quantity;
-      const newCartProducts = userCart.products.map((product) => {
+      let newCartProducts = userCart.products.map((product) => {
         if (product.sku === sku) {
           product.price = newPrice;
           product.quantity -= quantity;
         }
         return product;
       });
+
+      newCartProducts = newCartProducts.filter(
+        (product) => product.quantity !== 0
+      );
 
       const date = new Date();
       await Cart.updateOne(
@@ -246,10 +250,12 @@ const changeProductQuantity = async (req, res) => {
         }
       );
 
-      const newProduct = product.in_carts.map((cart) => {
+      let newProduct = product.in_carts.map((cart) => {
         cart.id === cartId ? (cart.quantity -= quantity) : "";
         return cart;
       });
+
+      newProduct = newProduct.filter((cart) => cart.quantity !== 0);
 
       await products.updateOne(
         { sku },
